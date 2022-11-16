@@ -18,9 +18,19 @@ public class ToDoList {
 		return null;
 	}
 	
-	public void switchPriority(int a, int b) {
-		Task temp = todo.get(a);
-		todo.set(a, todo.get(b));
-		todo.set(b, temp);
+	public void sort() {
+		Task temp[] = new Task[todo.size()];
+		
+		for (int i = 0; i < todo.size(); i++) {
+			
+		}
+		
+		// sort year last
+		// sort month second
+		// sort day first
 	}
+	
+	public int size() { return todo.size(); }
+	
+	public Task get(int i) { return todo.get(i); }
 }

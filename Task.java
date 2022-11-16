@@ -1,6 +1,6 @@
 public class Task {
 	private boolean valid = true;
-	private int date[] = {0, 0, 0}; // like binary sort?
+	private int date[] = {0, 0, 0}; //month / day / year
 	private String title;
 	private String description;
 	
@@ -20,6 +20,15 @@ public class Task {
 	public String getDesc() { return description; }
 	
 	public String getDate() {
-		return date[0] + "/" + date[1] + "/" + date[2];
+		String dateStr = "";
+		for (int i = 0; i < 3; i++) {
+			if (date[i] < 10) { dateStr += "0"; }
+			dateStr += "" + date[i];
+			if (i < 2) { dateStr += "/";}
+		}
+		
+		return dateStr;
 	}
+	
+	public int[] getRawDate() { return date; }
 }
