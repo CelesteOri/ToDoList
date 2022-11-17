@@ -4,11 +4,16 @@ public class Task {
 	private String title;
 	private String description;
 	
+	private boolean hover;
+	private boolean completed;
+	
 	public Task(String title, String description, int date[]) {
 		if (date.length != 3) { valid = false; return; }
 		this.title = title;
 		this.description = description;
 		this.date = date;
+		this.hover = false;
+		this.completed = false;
 	}
 	
 	public boolean isValid() { return valid; }
@@ -31,4 +36,8 @@ public class Task {
 	}
 	
 	public int[] getRawDate() { return date; }
+	
+	public void hover() { hover = true; }
+	public void off() { hover = false; }
+	public boolean isHovered() { return hover; }
 }

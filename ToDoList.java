@@ -18,7 +18,7 @@ public class ToDoList {
 		return null;
 	}
 	
-	public void sort() {
+	public void sort() { // Radix sort?
 		Task temp[] = new Task[todo.size()];
 		
 		for (int i = 0; i < todo.size(); i++) {
