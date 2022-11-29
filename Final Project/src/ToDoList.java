@@ -1,3 +1,9 @@
+/**
+ * AUTOSORT
+ * SAVE STATES
+ * CONVERT TO TXT / TXT TO TODOLIST
+ * **/
+
 import java.util.ArrayList;
 
 public class ToDoList {
@@ -16,6 +22,17 @@ public class ToDoList {
 		
 		if (del) { return done; }
 		return null;
+	}
+	
+	public Task remove(int index) {
+		Task done = null;
+	
+		if (index < todo.size()) {
+			done = todo.get(index);
+			todo.remove(done);
+		}
+		
+		return done;
 	}
 	
 	public void sort() { // Radix sort?
