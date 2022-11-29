@@ -22,7 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 
 
 public class UI {
-	static final int COORDS[] = {20, 100};
+	static final int COORDS[] = {20, 50};
 	
 	public static void main(String[] args) {
 		
@@ -47,17 +47,18 @@ public class UI {
 	 	Canvas canvas = new Canvas(upperComp, SWT.NONE);
 	 	canvas.setSize(1000, 600); 
 	 		
-	 	int coord[] = {COORDS[0], COORDS[1]};
 	 	canvas.addPaintListener(
-	 			new CanvasPaintListener(canvas, todo, done, screen, coord));
+	 			new CanvasPaintListener(canvas, todo, done, screen, COORDS));
 	 	canvas.addMouseListener(new MouseListener() {
 	 		public void mouseDoubleClick(MouseEvent event) {}
 	 		public void mouseDown(MouseEvent event) {
 	 			int x = event.x; int y = event.y;
 	 			int index = (y - COORDS[1])/100; 
 				
-	 			if (x >= COORDS[0] + 10 && x <= COORDS[0] + 50 && index < todo.size()
-	 				&& y >= (100*index) + 70 && y <= (100*index) + 110) {
+	 			if (x >= COORDS[0] + 10 && x <= COORDS[0] + 50 
+	 				&& y >= (100*index) + COORDS[1] + 20
+	 				&& y <= (100*index) + COORDS[1] + 60
+	 				&& index < todo.size() && index >= 0) {
 	 					todo.get(index).off(); 
 	 					Task completed = todo.remove(todo.get(index));
 	 					if (completed != null) { 
@@ -85,8 +86,10 @@ public class UI {
 					}
 				}
 				
-				if (x >= COORDS[0] && x <= COORDS[0] + 600 && index < todo.size()
-		 				&& y >= (100*index) + 50 && y <= (100*index) + 130) {
+				if (x >= COORDS[0] && x <= COORDS[0] + 600
+		 				&& y >= (100*index) + COORDS[1]
+		 				&& y <= (100*index) + COORDS[1] + 80
+		 				&& index < todo.size() && index >= 0) {
 					todo.get(index).hover();
 					if (temp == index) { change = false;}
 					else { change = true; }
@@ -154,18 +157,18 @@ class CanvasPaintListener implements PaintListener {
 		}
 		
 		for (int i = 0; i < todo.size(); i++) { 
-			drawTask(e, i*100+50, todo.get(i));
+			drawTask(e, i*100+baseY, todo.get(i));
 		}
 		
 		
-		int y = baseY + 100 * (todo.size()) ;
+		int y =  100 * (todo.size() + 1) ;
 		e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		e.gc.fillRoundRectangle(0, y, 700, 100*done.size() + 50, 25, 25);
 		e.gc.setForeground(display.getSystemColor(SWT.COLOR_DARK_GREEN));
 		e.gc.setFont(new Font(display, "Comic Sans", 12, SWT.BOLD));
 		e.gc.drawString("COMPLETED TASKS: ", 20, y + 10);
 		for (int i = 0; i < done.size(); i++) {
-			drawTask(e, y + i*100+50, done.get(i));
+			drawTask(e, y + i*100+baseY, done.get(i));
 		}
 	}
 }  
