@@ -8,9 +8,15 @@
  * SAVE / LOAD SYSTEM AND RELATED PROMPTS
  * **/
 
+import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
@@ -46,8 +52,57 @@ public class UI {
 	    //---- button for adding a task-------------------------------------------------------------------------------------------
 	    Button addTask = new Button(shell, SWT.PUSH);
 	    addTask.setText("Add Task"); 	    
-	    addTask.addSelectionListener(new selectListen());
+	    //addTask.addSelectionListener(new selectListen());
 	    addTask.addMouseListener(new mouseListen());
+	    addTask.addSelectionListener(widgetSelectedAdapter(e -> {
+	    	Shell dialog = new Shell (shell, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+			dialog.setMinimumSize(500, 300);
+			dialog.setText("Add Task");
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.numColumns = 3;
+			dialog.setSize(500, 300);
+			dialog.setLayout (gridLayout);
+			
+			
+			Label label = new Label (dialog, SWT.NONE);
+			Text text = new Text (dialog, SWT.SINGLE | SWT.BORDER);
+			GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData.horizontalSpan = 2;
+			gridData.grabExcessHorizontalSpace = true;
+			text.setLayoutData(gridData);
+			label.setText ("Title:");
+			
+			Label l = new Label (dialog, SWT.NONE);
+			final Text t = new Text (dialog, SWT.SINGLE | SWT.BORDER);
+			GridData gridData2 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData2.horizontalAlignment = GridData.FILL;
+			gridData2.horizontalSpan = 2;
+			t.setLayoutData(gridData2);
+			l.setText ("Description:");
+			
+			Button cancel = new Button (dialog, SWT.PUSH);
+			cancel.setText ("Cancel");
+			cancel.addSelectionListener (widgetSelectedAdapter(event -> {
+				System.out.println("User cancelled dialog");
+				dialog.close ();
+			}));
+			
+			Button ok = new Button (dialog, SWT.PUSH);
+			ok.setText ("OK");
+			ok.addSelectionListener (widgetSelectedAdapter(event -> {
+				System.out.println ("Title: " + text.getText ());
+				System.out.println ("Description: " + t.getText ());
+				// add task to list
+				Task newTask = new Task(text.getText(), t.getText(), new int[]{0,0,0});
+				todo.add(newTask);
+				dialog.close ();
+			}));
+
+			dialog.setDefaultButton (ok);
+			dialog.pack ();
+			dialog.open ();
+	    }));
+	    
 		// -----------------------------------------------------------------------------------------------------------------------
 
 	 	// Canvas setup
