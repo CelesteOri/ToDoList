@@ -52,4 +52,8 @@ public class ToDoList {
 	public int size() { return todo.size(); }
 	
 	public Task get(int i) { return todo.get(i); }
+	
+	public ArrayList<Tag> getTags(){
+		return this.tags;
+	}
 }

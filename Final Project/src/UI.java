@@ -1,5 +1,8 @@
 
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
+
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.*;
@@ -103,13 +106,56 @@ public class UI {
 			l5.setText ("Year:");
 			
 			Label l6 = new Label (dialog, SWT.NONE);
+			final Text tag = new Text (dialog, SWT.SINGLE | SWT.BORDER);
 			GridData gridData6 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 			gridData6.horizontalAlignment = GridData.FILL;
 			gridData6.horizontalSpan = 2;
+			tag.setLayoutData(gridData5);
+			l6.setText ("Tag:");
 			
 			
-			l6.setText ("Choose a tag:");
 			GridData gridData7 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData7.horizontalSpan = 4;
+			Button chooseTag = new Button(dialog, SWT.PUSH);
+			chooseTag.setText("Choose tag"); 	  
+		    //String tag = new String();
+		    chooseTag.addSelectionListener(new selectListen() {
+		    	public void widgetSelected(SelectionEvent event) {
+		    		System.out.println("Choosing a tag");
+		    		Shell tableShell = new Shell (shell, SWT.TITLE|SWT.APPLICATION_MODAL|SWT.CLOSE|SWT.MAX);
+					tableShell.setSize(300, 300);
+		    		Table table = new Table(tableShell, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		    		for (int i = 0; i < todo.getTags().size(); i++) {
+		    			TableItem item = new TableItem(table, SWT.NONE);
+		    			item.setText("Tag: " + todo.getTags().get(i).getTitle());
+		    		}
+		    		table.setSize(300, 300);
+		    		table.addSelectionListener(new selectListen() {
+		    			public void widgetSelected(SelectionEvent event) {
+		    				String string = event.detail == SWT.CHECK ? "Checked" : "Selected";
+		    				System.out.println(event.item + " " + string);
+		    				System.out.println(event.item);
+		    				String selected = event.item.toString();
+		    				selected = selected.replace("TableItem {Tag: ", "");
+		    				selected = selected.replace("}", "");
+		    				System.out.println(selected);
+		    				//tag = selected;
+		    				tag.setText(selected);
+		    				tableShell.close();
+		    			}
+		    			public void widgetDefaultSelected(SelectionEvent event) {
+		    	    		
+		    	    	}
+		    	    });
+		    		tableShell.open();
+		    		
+		    	}
+		    	public void widgetDefaultSelected(SelectionEvent event) {
+		    		
+		    	}
+		    });			
+			
+			/*GridData gridData7 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 			gridData7.horizontalSpan = 4;
 			Button personalTag = new Button(dialog, SWT.CHECK);
 			personalTag.setText("Personal");
@@ -130,7 +176,9 @@ public class UI {
 			workTag.addSelectionListener (widgetSelectedAdapter(event -> {
 				System.out.println("selected work tag");
 			}));
-			workTag.setLayoutData(gridData7);
+			workTag.setLayoutData(gridData7);*/
+			
+			
 			
 			Button cancel = new Button (dialog, SWT.PUSH);
 			cancel.setText ("Cancel");
@@ -149,17 +197,9 @@ public class UI {
 				int monthInt = Integer.parseInt(month.getText());
 				int dayInt = Integer.parseInt(day.getText());
 				int yearInt = Integer.parseInt(year.getText());
-				String tagStr = null;
-				if (personalTag.getSelection()) {
-					tagStr = "Personal";
-				} else if (schoolTag.getSelection()) {
-					tagStr = "School";
-				} else {
-					tagStr = "Work";
-				}
-				Tag tag = new Tag(tagStr);
-				Task newTask = new Task(text.getText(), t.getText(), new int[]{monthInt,dayInt,yearInt}, tag);
-				newTask.setTag(tag);
+				Tag newTag = new Tag(tag.getText());
+				Task newTask = new Task(text.getText(), t.getText(), new int[]{monthInt,dayInt,yearInt}, newTag);
+				newTask.setTag(newTag);
 				todo.add(newTask);
 				dialog.close ();
 			}));
@@ -195,8 +235,35 @@ public class UI {
 	    
 	    //---- button for applying a filter---------------------------------------------------------------------------------------
 	    Button applyFilter = new Button(shell, SWT.PUSH);
-	    applyFilter.setText("Apply Filter"); 	    
-	    applyFilter.addSelectionListener(new selectListen());
+	    applyFilter.setText("Apply Filter"); 	  
+	    ArrayList<String> filtersToApply = new ArrayList<String>();
+	    applyFilter.addSelectionListener(new selectListen() {
+	    	public void widgetSelected(SelectionEvent event) {
+	    		System.out.println("Applying a filter");
+	    		Shell tableShell = new Shell (shell);
+				tableShell.setSize(300, 300);
+	    		Table table = new Table(tableShell, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+	    		for (int i = 0; i < todo.getTags().size(); i++) {
+	    			TableItem item = new TableItem(table, SWT.NONE);
+	    			item.setText("Tag: " + todo.getTags().get(i).getTitle());
+	    		}
+	    		table.setSize(300, 300);
+	    		table.addSelectionListener(new selectListen() {
+	    			public void widgetSelected(SelectionEvent event) {
+	    				String string = event.detail == SWT.CHECK ? "Checked" : "Selected";
+	    				System.out.println(event.item + " " + string);
+	    			}
+	    			public void widgetDefaultSelected(SelectionEvent event) {
+	    	    		
+	    	    	}
+	    	    });
+	    		tableShell.open();
+	    		
+	    	}
+	    	public void widgetDefaultSelected(SelectionEvent event) {
+	    		
+	    	}
+	    });
 	    applyFilter.addMouseListener(new mouseListen());
 		// -----------------------------------------------------------------------------------------------------------------------
 	    
