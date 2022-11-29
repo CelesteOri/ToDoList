@@ -1,19 +1,21 @@
 public class Task {
-	private boolean valid = true;
-	private int date[] = {0, 0, 0}; //month / day / year
+	private int date[] = {0, 0, 0}; // month / day / year
 	private String title;
 	private String description;
+	private Tag tag;
 	
+	private boolean valid = true;
 	private boolean hover;
 	private boolean completed;
 	
-	public Task(String title, String description, int date[]) {
-		if (date.length != 3) { valid = false; return; }
+	public Task(String title, String description, int date[], Tag tag) {
+		if (date.length != 3) { valid = false; }
 		this.title = title;
 		this.description = description;
 		this.date = date;
 		this.hover = false;
 		this.completed = false;
+		this.tag = null;
 	}
 	
 	public boolean isValid() { return valid; }
@@ -23,6 +25,9 @@ public class Task {
 	
 	public void setDesc(String des) { this.description = des; }
 	public String getDesc() { return description; }
+	
+	public void setTag(Tag tag) { this.tag = tag; }
+	public Tag getTag() { return tag; }
 	
 	public String getDate() {
 		String dateStr = "";
@@ -40,4 +45,6 @@ public class Task {
 	public void hover() { hover = true; }
 	public void off() { hover = false; }
 	public boolean isHovered() { return hover; }
+	public void done() { completed = true; }
+	public boolean isCompleted() { return completed; }
 }
