@@ -1,3 +1,9 @@
+/**
+ * AUTOSORT
+ * SAVE STATES
+ * CONVERT TO TXT / TXT TO TODOLIST
+ * **/
+
 import java.util.ArrayList;
 
 public class ToDoList {
@@ -18,13 +24,19 @@ public class ToDoList {
 		return null;
 	}
 	
-	public void sort() { // Radix sort?
-		Task temp[] = new Task[todo.size()];
-		
-		for (int i = 0; i < todo.size(); i++) {
-			
+	public Task remove(int index) {
+		Task done = null;
+	
+		if (index < todo.size()) {
+			done = todo.get(index);
+			todo.remove(done);
 		}
 		
+		return done;
+	}
+	
+	public void sort() { // Radix sort? Updates after each addition / removal
+				
 		// sort year last
 		// sort month second
 		// sort day first

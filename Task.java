@@ -1,14 +1,14 @@
 public class Task {
-	private boolean valid = true;
-	private int date[] = {0, 0, 0}; //month / day / year
+	private int date[] = {0, 0, 0}; // month / day / year
 	private String title;
 	private String description;
 	
+	private boolean valid = true;
 	private boolean hover;
 	private boolean completed;
 	
 	public Task(String title, String description, int date[]) {
-		if (date.length != 3) { valid = false; return; }
+		if (date.length != 3) { valid = false; }
 		this.title = title;
 		this.description = description;
 		this.date = date;
@@ -40,4 +40,6 @@ public class Task {
 	public void hover() { hover = true; }
 	public void off() { hover = false; }
 	public boolean isHovered() { return hover; }
+	public void done() { completed = true; }
+	public boolean isCompleted() { return completed; }
 }
