@@ -10,9 +10,9 @@
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
-import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.*;
 
 /**
  * THINGS TO ADJUST IF CANVASPAINTLISTENER ITEM POSITIONS/SIZES ARE MOVED:
@@ -42,13 +42,22 @@ public class UI {
 		
 		//---- our Widgets start here 
 	    Composite upperComp = new Composite(shell, SWT.NO_FOCUS);
+	    
+	    //---- button for adding a task-------------------------------------------------------------------------------------------
+	    Button addTask = new Button(shell, SWT.PUSH);
+	    addTask.setText("Add Task"); 	    
+	    addTask.addSelectionListener(new selectListen());
+	    addTask.addMouseListener(new mouseListen());
+		// -----------------------------------------------------------------------------------------------------------------------
 
 	 	// Canvas setup
 	 	Canvas canvas = new Canvas(upperComp, SWT.NONE);
 	 	canvas.setSize(1000, 600); 
-	 		
+	 	//CanvasPaintListener pl = new CanvasPaintListener(canvas, todo, screen);
+	 	int coord[] = {COORDS[0], COORDS[1]};
 	 	canvas.addPaintListener(
-	 			new CanvasPaintListener(canvas, todo, done, screen, COORDS));
+	 			new CanvasPaintListener(canvas, todo, done, screen, coord));
+	 	
 	 	canvas.addMouseListener(new MouseListener() {
 	 		public void mouseDoubleClick(MouseEvent event) {}
 	 		public void mouseDown(MouseEvent event) {
@@ -56,17 +65,17 @@ public class UI {
 	 			int index = (y - COORDS[1])/100; 
 				
 	 			if (x >= COORDS[0] + 10 && x <= COORDS[0] + 50 
-	 				&& y >= (100*index) + COORDS[1] + 20
-	 				&& y <= (100*index) + COORDS[1] + 60
-	 				&& index < todo.size() && index >= 0) {
-	 					todo.get(index).off(); 
-	 					Task completed = todo.remove(todo.get(index));
-	 					if (completed != null) { 
-	 						completed.done();
-	 						done.add(completed); 
-	 					}
-	 					canvas.redraw();
-				}  
+	                     && y >= (100*index) + COORDS[1] + 20
+	                     && y <= (100*index) + COORDS[1] + 60
+	                     && index < todo.size() && index >= 0) {
+	                         todo.get(index).off(); 
+	                         Task completed = todo.remove(todo.get(index));
+	                         if (completed != null) { 
+	                             completed.done();
+	                             done.add(completed); 
+	                         }
+	                         canvas.redraw();
+	                }   
 	 		}
 	 		public void mouseUp(MouseEvent e) {}
 	 	});
@@ -87,18 +96,18 @@ public class UI {
 				}
 				
 				if (x >= COORDS[0] && x <= COORDS[0] + 600
-		 				&& y >= (100*index) + COORDS[1]
-		 				&& y <= (100*index) + COORDS[1] + 80
-		 				&& index < todo.size() && index >= 0) {
-					todo.get(index).hover();
-					if (temp == index) { change = false;}
-					else { change = true; }
-				} 
+                        && y >= (100*index) + COORDS[1]
+                        && y <= (100*index) + COORDS[1] + 80
+                        && index < todo.size() && index >= 0) {
+                   todo.get(index).hover();
+                   if (temp == index) { change = false;}
+                   else { change = true; }
+               } 
 				
 				if (change == true) { canvas.redraw(); }
 			}
 		});
-	 	
+	 	shell.pack(); 
 	 	shell.open();
 		while( !shell.isDisposed()) {
 			if(!screen.readAndDispatch()) { screen.sleep(); }
@@ -109,7 +118,7 @@ public class UI {
 }
 
 class CanvasPaintListener implements PaintListener {
-    Canvas shell; ToDoList todo; ToDoList done; Display display;
+	Canvas shell; ToDoList todo; ToDoList done; Display display;
     int x; int baseY;
     
     public CanvasPaintListener(Canvas sh, ToDoList todo, ToDoList done,
@@ -118,9 +127,8 @@ class CanvasPaintListener implements PaintListener {
     	this.todo = todo; this.done = done;
     	this.x = coord[0]; this.baseY = coord[1];
     }
-
-    public void drawTask(PaintEvent e, int y, Task task) {   
-
+    
+    public void drawTask(PaintEvent e, int y, Task task) {
     	int baseColor = SWT.COLOR_DARK_GREEN;
     	int hoverColor = SWT.COLOR_GREEN;
     	
@@ -169,6 +177,40 @@ class CanvasPaintListener implements PaintListener {
 		e.gc.drawString("COMPLETED TASKS: ", 20, y + 10);
 		for (int i = 0; i < done.size(); i++) {
 			drawTask(e, y + i*100+baseY, done.get(i));
+
 		}
 	}
 }  
+
+// selectListener class ----------------------------------------------------------------------------------------------------------------
+class selectListen implements SelectionListener 
+{
+
+	public void widgetSelected(SelectionEvent event) 
+	{
+		//System.out.println("selection event");
+		//Button.text.setText("Selection!");
+	}
+	public void widgetDefaultSelected(SelectionEvent event)
+	{                    
+	}  
+}
+
+//mouseListen class ----------------------------------------------------------------------------------------------------------------
+class mouseListen implements MouseListener 
+{
+
+	public void mouseDoubleClick(MouseEvent e)
+	{
+		System.out.println("Double click.");
+	}
+	public void mouseDown(MouseEvent e)
+	{
+		System.out.println("Clicked on addTask");
+	}
+	public void mouseUp(MouseEvent e)
+	{
+		//System.out.println("Click - up.");
+	}
+}
+
