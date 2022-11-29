@@ -99,7 +99,7 @@ public class UI {
 
 	 	// Canvas setup
 	 	Canvas canvas = new Canvas(upperComp, SWT.NONE);
-	 	canvas.setSize(1000, 600); 
+	 	canvas.setSize(1000, 800); 
 	 	//CanvasPaintListener pl = new CanvasPaintListener(canvas, todo, screen);
 	 	int coord[] = {COORDS[0], COORDS[1]};
 	 	canvas.addPaintListener(
