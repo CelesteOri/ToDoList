@@ -3,6 +3,7 @@ public class Task {
 	private int date[] = {0, 0, 0}; //month / day / year
 	private String title;
 	private String description;
+	private Tag tag;
 	
 	private boolean hover;
 	private boolean completed;
@@ -17,6 +18,9 @@ public class Task {
 	}
 	
 	public boolean isValid() { return valid; }
+	
+	public void setTag(Tag t) {tag=t;}
+	public Tag getTag() {return tag;}
 	
 	public void setTitle(String title) { this.title = title; }
 	public String getTitle() { return title; }

@@ -51,7 +51,7 @@ public class UI {
 	    
 	    //---- button for adding a task-------------------------------------------------------------------------------------------
 	    Button addTask = new Button(shell, SWT.PUSH);
-	    addTask.setText("Add Task"); 	    
+	    addTask.setText("Add Task"); 	 
 	    //addTask.addSelectionListener(new selectListen());
 	    addTask.addMouseListener(new mouseListen());
 	    addTask.addSelectionListener(widgetSelectedAdapter(e -> {
@@ -104,12 +104,43 @@ public class UI {
 			year.setLayoutData(gridData5);
 			l5.setText ("Year:");
 			
+			Label l6 = new Label (dialog, SWT.NONE);
+			GridData gridData6 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData6.horizontalAlignment = GridData.FILL;
+			gridData6.horizontalSpan = 2;
+			
+			
+			l6.setText ("Choose a tag:");
+			GridData gridData7 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData7.horizontalSpan = 4;
+			Button personalTag = new Button(dialog, SWT.CHECK);
+			personalTag.setText("Personal");
+			personalTag.addSelectionListener (widgetSelectedAdapter(event -> {
+				System.out.println("selected personal tag");
+			}));
+			personalTag.setLayoutData(gridData7);
+			
+			Button schoolTag = new Button(dialog, SWT.CHECK);
+			schoolTag.setText("School");
+			schoolTag.addSelectionListener (widgetSelectedAdapter(event -> {
+				System.out.println("selected school tag");
+			}));
+			schoolTag.setLayoutData(gridData7);
+			
+			Button workTag = new Button(dialog, SWT.CHECK);
+			workTag.setText("Work");
+			workTag.addSelectionListener (widgetSelectedAdapter(event -> {
+				System.out.println("selected work tag");
+			}));
+			workTag.setLayoutData(gridData7);
+			
 			Button cancel = new Button (dialog, SWT.PUSH);
 			cancel.setText ("Cancel");
 			cancel.addSelectionListener (widgetSelectedAdapter(event -> {
 				System.out.println("User cancelled dialog");
 				dialog.close ();
 			}));
+			
 			
 			Button ok = new Button (dialog, SWT.PUSH);
 			ok.setText ("OK");
@@ -120,7 +151,17 @@ public class UI {
 				int monthInt = Integer.parseInt(month.getText());
 				int dayInt = Integer.parseInt(day.getText());
 				int yearInt = Integer.parseInt(year.getText());
+				String tagStr = null;
+				if (personalTag.getSelection()) {
+					tagStr = "Personal";
+				} else if (schoolTag.getSelection()) {
+					tagStr = "School";
+				} else {
+					tagStr = "Work";
+				}
+				Tag tag = new Tag(tagStr);
 				Task newTask = new Task(text.getText(), t.getText(), new int[]{monthInt,dayInt,yearInt});
+				newTask.setTag(tag);
 				todo.add(newTask);
 				dialog.close ();
 			}));
