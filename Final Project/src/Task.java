@@ -40,4 +40,6 @@ public class Task {
 	public void hover() { hover = true; }
 	public void off() { hover = false; }
 	public boolean isHovered() { return hover; }
+	public void done() { completed = true; }
+	public boolean isCompleted() { return completed; }
 }
