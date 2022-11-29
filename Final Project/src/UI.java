@@ -497,6 +497,7 @@ public class UI {
 				}
 				Tag tag = new Tag(tagStr);
 				Task newTask = new Task(text.getText(), t.getText(), new int[]{monthInt,dayInt,yearInt}, tag);
+				newTask.setTag(tag);
 				todo.add(newTask);
 				dialog.close ();
 			}));
@@ -653,6 +654,17 @@ class CanvasPaintListener implements PaintListener {
     	
     	e.gc.setFont(new Font(display, "Comic Sans", 12, 0));
     	e.gc.drawString(task.getDate(), x + 480, y+25);
+    	
+      	e.gc.setFont(new Font(display, "Comic Sans", 12, 0));
+      	if (task.getTag() != null) {
+      		System.out.println("here");
+      		if (task.getTag().getTitle() != null) {
+          		e.gc.drawString(task.getTag().getTitle(), x + 480, y+50);
+
+      		}
+      	}
+    	
+    	
 	}
     
 	public void paintControl(PaintEvent e) {
