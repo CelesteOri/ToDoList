@@ -8,22 +8,15 @@ import java.util.ArrayList;
 
 public class ToDoList {
 	private ArrayList<Task> todo;
-	private ArrayList<Tag> tags;
 	
 	public ToDoList() {
 		todo = new ArrayList<Task>();
-		tags = new ArrayList<Tag>();
 	}
 	
 	public void add(Task newTask) {
 		todo.add(newTask);
 	}
 	
-	public void addTag(String tag) {
-		Tag newTag = new Tag(tag);
-		tags.add(newTag);
-	}
-		
 	public Task remove(Task done) {
 		boolean del = todo.remove(done);
 		
