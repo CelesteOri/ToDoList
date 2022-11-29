@@ -80,6 +80,30 @@ public class UI {
 			t.setLayoutData(gridData2);
 			l.setText ("Description:");
 			
+			Label l3 = new Label (dialog, SWT.NONE);
+			final Text month = new Text (dialog, SWT.SINGLE | SWT.BORDER);
+			GridData gridData3 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData3.horizontalAlignment = GridData.FILL;
+			gridData3.horizontalSpan = 2;
+			month.setLayoutData(gridData3);
+			l3.setText ("Month:");
+			
+			Label l4 = new Label (dialog, SWT.NONE);
+			final Text day = new Text (dialog, SWT.SINGLE | SWT.BORDER);
+			GridData gridData4 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData4.horizontalAlignment = GridData.FILL;
+			gridData4.horizontalSpan = 2;
+			day.setLayoutData(gridData4);
+			l4.setText ("Day:");
+			
+			Label l5 = new Label (dialog, SWT.NONE);
+			final Text year = new Text (dialog, SWT.SINGLE | SWT.BORDER);
+			GridData gridData5 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gridData5.horizontalAlignment = GridData.FILL;
+			gridData5.horizontalSpan = 2;
+			year.setLayoutData(gridData5);
+			l5.setText ("Year:");
+			
 			Button cancel = new Button (dialog, SWT.PUSH);
 			cancel.setText ("Cancel");
 			cancel.addSelectionListener (widgetSelectedAdapter(event -> {
@@ -93,7 +117,10 @@ public class UI {
 				System.out.println ("Title: " + text.getText ());
 				System.out.println ("Description: " + t.getText ());
 				// add task to list
-				Task newTask = new Task(text.getText(), t.getText(), new int[]{0,0,0});
+				int monthInt = Integer.parseInt(month.getText());
+				int dayInt = Integer.parseInt(day.getText());
+				int yearInt = Integer.parseInt(year.getText());
+				Task newTask = new Task(text.getText(), t.getText(), new int[]{monthInt,dayInt,yearInt});
 				todo.add(newTask);
 				dialog.close ();
 			}));
