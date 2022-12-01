@@ -4,6 +4,7 @@ public class Task {
 	private String title;
 	private String description;
 	private Tag tag;
+	private boolean visible;
 	
 	private boolean valid = true;
 	private boolean hover;
@@ -17,6 +18,7 @@ public class Task {
 		this.hover = false;
 		this.completed = false;
 		this.tag = null;
+		this.visible = true;
 	}
 	
 	public boolean isValid() { return valid; }
@@ -29,6 +31,10 @@ public class Task {
 	
 	public void setTag(Tag tag) { this.tag = tag; }
 	public Tag getTag() { return tag; }
+	
+	public void setVisibility(Boolean vis) { this.visible = vis; }
+	public Boolean getVisibility() { return visible; }
+	
 	
 	public String getDate() {
 		String dateStr = "";

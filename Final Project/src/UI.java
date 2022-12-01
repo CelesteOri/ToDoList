@@ -127,7 +127,7 @@ public class UI {
 		    		Table table = new Table(tableShell, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		    		for (int i = 0; i < todo.getTags().size(); i++) {
 		    			TableItem item = new TableItem(table, SWT.NONE);
-		    			item.setText("Tag: " + todo.getTags().get(i).getTitle());
+		    			item.setText(todo.getTags().get(i).getTitle());
 		    		}
 		    		table.setSize(300, 300);
 		    		table.addSelectionListener(new selectListen() {
@@ -136,10 +136,9 @@ public class UI {
 		    				System.out.println(event.item + " " + string);
 		    				System.out.println(event.item);
 		    				String selected = event.item.toString();
-		    				selected = selected.replace("TableItem {Tag: ", "");
+		    				selected = selected.replace("TableItem {", "");
 		    				selected = selected.replace("}", "");
 		    				System.out.println(selected);
-		    				//tag = selected;
 		    				tag.setText(selected);
 		    				tableShell.close();
 		    			}
@@ -154,31 +153,7 @@ public class UI {
 		    		
 		    	}
 		    });			
-			
-			/*GridData gridData7 = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-			gridData7.horizontalSpan = 4;
-			Button personalTag = new Button(dialog, SWT.CHECK);
-			personalTag.setText("Personal");
-			personalTag.addSelectionListener (widgetSelectedAdapter(event -> {
-				System.out.println("selected personal tag");
-			}));
-			personalTag.setLayoutData(gridData7);
-			
-			Button schoolTag = new Button(dialog, SWT.CHECK);
-			schoolTag.setText("School");
-			schoolTag.addSelectionListener (widgetSelectedAdapter(event -> {
-				System.out.println("selected school tag");
-			}));
-			schoolTag.setLayoutData(gridData7);
-			
-			Button workTag = new Button(dialog, SWT.CHECK);
-			workTag.setText("Work");
-			workTag.addSelectionListener (widgetSelectedAdapter(event -> {
-				System.out.println("selected work tag");
-			}));
-			workTag.setLayoutData(gridData7);*/
-			
-			
+
 			
 			Button cancel = new Button (dialog, SWT.PUSH);
 			cancel.setText ("Cancel");
@@ -233,10 +208,17 @@ public class UI {
 	    addTag.addMouseListener(new mouseListen());
 		// -----------------------------------------------------------------------------------------------------------------------
 	    
+	    //---- button for Delete tag----------------------------------------------------------------------------------------------
+	    Button deleteFilter = new Button(shell, SWT.PUSH);
+	    deleteFilter.setText("Delete Tag"); 	    
+	    deleteFilter.addSelectionListener(new selectListen());
+	    deleteFilter.addMouseListener(new mouseListen());
+		// -----------------------------------------------------------------------------------------------------------------------
+	    
 	    //---- button for applying a filter---------------------------------------------------------------------------------------
 	    Button applyFilter = new Button(shell, SWT.PUSH);
 	    applyFilter.setText("Apply Filter"); 	  
-	    ArrayList<String> filtersToApply = new ArrayList<String>();
+	    //ArrayList<String> filtersToApply = new ArrayList<String>();
 	    applyFilter.addSelectionListener(new selectListen() {
 	    	public void widgetSelected(SelectionEvent event) {
 	    		System.out.println("Applying a filter");
@@ -245,13 +227,35 @@ public class UI {
 	    		Table table = new Table(tableShell, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 	    		for (int i = 0; i < todo.getTags().size(); i++) {
 	    			TableItem item = new TableItem(table, SWT.NONE);
-	    			item.setText("Tag: " + todo.getTags().get(i).getTitle());
+	    			item.setText(todo.getTags().get(i).getTitle());
 	    		}
 	    		table.setSize(300, 300);
 	    		table.addSelectionListener(new selectListen() {
 	    			public void widgetSelected(SelectionEvent event) {
 	    				String string = event.detail == SWT.CHECK ? "Checked" : "Selected";
 	    				System.out.println(event.item + " " + string);
+	    				String selected = event.item.toString();
+	    				selected = selected.replace("TableItem {", "");
+	    				selected = selected.replace("}", "");
+	    				System.out.println(selected);
+	    				//filtersToApply.add(selected);
+	    				for (int i = 0; i < todo.size(); i++) {
+	    					Task t = todo.get(i);
+	    					if (t.getTag() != null) {
+	    						System.out.println("title = " + t.getTag().getTitle());
+	    						if (t.getTag().getTitle().equals(selected)) {
+	    							System.out.print("equal");
+		    						t.setVisibility(true);
+		    					}
+	    						else {
+	    							t.setVisibility(false);
+	    						}
+	    					}
+	    					else {
+	    						t.setVisibility(false);
+	    					}
+	    				}
+	    				tableShell.close();
 	    			}
 	    			public void widgetDefaultSelected(SelectionEvent event) {
 	    	    		
@@ -263,25 +267,30 @@ public class UI {
 	    	public void widgetDefaultSelected(SelectionEvent event) {
 	    		
 	    	}
+	    	
 	    });
+	   
 	    applyFilter.addMouseListener(new mouseListen());
 		// -----------------------------------------------------------------------------------------------------------------------
-	    
-	    //---- button for Edit a filter-------------------------------------------------------------------------------------------
-	    Button editFilter = new Button(shell, SWT.PUSH);
-	    editFilter.setText("Edit Tag"); 	    
-	    editFilter.addSelectionListener(new selectListen());
-	    editFilter.addMouseListener(new mouseListen());
-		// -----------------------------------------------------------------------------------------------------------------------
-	    
-	    
-	    //---- button for Delete a filter-------------------------------------------------------------------------------------------
-	    Button deleteFilter = new Button(shell, SWT.PUSH);
-	    deleteFilter.setText("Delete Tag"); 	    
-	    deleteFilter.addSelectionListener(new selectListen());
-	    deleteFilter.addMouseListener(new mouseListen());
-		// -----------------------------------------------------------------------------------------------------------------------
 
+
+	    //---- button for clear filter----------------------------------------------------------------------------------------------
+	    Button clearFilter = new Button(shell, SWT.PUSH);
+	    clearFilter.setText("Clear Filter"); 	    
+	    clearFilter.addSelectionListener(new selectListen() {
+	    	public void widgetSelected(SelectionEvent event) {
+	    		for (int i = 0; i < todo.size(); i++) {
+	    			Task t = todo.get(i);
+	    			t.setVisibility(true);
+	    		}
+	    		
+	    	}
+	    	public void widgetDefaultSelected(SelectionEvent event) {
+	    		
+	    	}
+	    });
+	    clearFilter.addMouseListener(new mouseListen());
+		// -----------------------------------------------------------------------------------------------------------------------
 
 	 	// Canvas setup
 	 	Canvas canvas = new Canvas(upperComp, SWT.NONE);
@@ -392,6 +401,8 @@ class CanvasPaintListener implements PaintListener {
 
       		}
       	}
+      	
+      	
     	
     	
 	}
@@ -409,7 +420,9 @@ class CanvasPaintListener implements PaintListener {
 		}
 		
 		for (int i = 0; i < todo.size(); i++) { 
-			drawTask(e, i*100+baseY, todo.get(i));
+			if (todo.get(i).getVisibility()) {
+				drawTask(e, i*100+baseY, todo.get(i));
+			}
 		}
 		
 		
