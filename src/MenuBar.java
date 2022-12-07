@@ -241,7 +241,6 @@ public class MenuBar {
 	        public void widgetSelected(SelectionEvent event) {
 	        	FileDialog fd = new FileDialog(shell, SWT.OPEN);
 	        	fd.setText("Open");
-	        	fd.setFilterPath("C:/");
 	        	String[] filterExt = { "*.todo" };
 	        	fd.setFilterExtensions(filterExt);
 	        	
