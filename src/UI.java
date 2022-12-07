@@ -1,4 +1,3 @@
-
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
 import java.util.ArrayList;
@@ -11,22 +10,17 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
 /**
- * PAST DUE DATE -> TURN TITLE / DATE RED
- * COMPLETED SECTION
- * TEMPLATES
- * 
- * FILTER / TAGGING SYSTEM
- * 
- * SAVE / LOAD SYSTEM AND RELATED PROMPTS
- * **/
-
-
-/**
- * THINGS TO ADJUST IF CANVASPAINTLISTENER ITEM POSITIONS/SIZES ARE MOVED:
- * - index from MouseListener and MouseMoveListener
- * 		- related if statements
- * **/
-
+/*
+ * FILE: UI.java
+ * AUTHOR(S): Honor Jang, Joanna Zabasajja, Michelle Uddin, Carlos Julian Garcia
+ * DATE: Dec. 6 2022
+ * PROJECT: ToDo List
+ * DESCRIPTION:  This is the UI class, this one is used to display the entire ToDoList user interface.
+ *      The lists are displayed as window tabs  with their indicated name, and the tasks are
+ *      shown as green rectangles inside the list tabs. This is where the shell and layout
+ *      of the screen is displayed and constructed.
+ *     
+ */
 
 public class UI {
 	static int OFFSET = 40; static int START = 50;
@@ -39,22 +33,28 @@ public class UI {
 		
 		Tab tabs = new Tab();
 		
+		/*
+	     * Shell layout construction
+	     */
 		Shell shell = new Shell(screen); 
 		shell.setSize(1000, 800); shell.setLayout( new GridLayout() );
-		shell.setText("To-Do List");
+		shell.setText("To-Do List"); 
 		
 		Composite upperComp = new Composite(shell, SWT.NO_FOCUS);
 		Canvas canvas = new Canvas(upperComp, SWT.NONE);
-	 	canvas.setSize(1000, 800); 
+	 	canvas.setSize(1000, 800); //canvas size
 	 	int select[] = {0};
 	 	
+	 
 	 	MenuBar menu = new MenuBar(shell, canvas, screen, tabs, select);
 	 	ScrollBar scroll[] = {new ScrollBar(canvas, coords, endpoint, START)};
 
 	 	int data[][] = {coords, select, endpoint};
 	 	canvas.addPaintListener(
 	 			new CanvasPaintListener(canvas, tabs, screen, data));
-	 	
+	 	/*
+	     * Mouse recognition
+	     */
 	 	canvas.addMouseListener(new MouseListener() {
 	 		public void mouseDoubleClick(MouseEvent event) {}
 	 		public void mouseDown(MouseEvent event) {
