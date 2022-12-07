@@ -1,3 +1,17 @@
+/* *****************************************************************************
+* AUTHOR: Joanna Zabasajja
+* FILE: InputDialog.java
+* ASSIGNMENT: A4 - To-Do List
+* COURSE: CSc 335; Fall 2022
+* 
+* PURPOSE: 
+* 	Input dialog for entering a new tag. The code got too long, so I (Honor)
+* 	moved it from MenuBar to its own class.
+* 
+* USAGE: 
+* 	Allows the user to add tags
+*/
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,33 +29,86 @@ public class InputDialog extends Dialog
 	private String message;
 	private String input;
 	
-
+	/**
+	 * A public constructor that makes the dialog box to add a new Tag.
+	 * Not a lot to say about that.
+	 * 
+	 * @param parent, the Shell this is written on
+	 * @param style, an int referring to the style of the Dialog; 
+	 * 		inherited from Dialog
+	 * 
+	 * @return none; creates the InputDialog
+	 */
 	public InputDialog(Shell parent, int style) {
 		super(parent, style);
 		setText("Tag dialog");
 		setMessage("Please enter a tag:");
 	}
 	
+	/**
+	 * A public constructor that makes the dialog box to add a new Tag.
+	 * Has a built-in style.
+	 * 
+	 * @param parent, the Shell this is written on
+	 * 
+	 * @return none; creates the InputDialog
+	 */
 	public InputDialog(Shell parent) {
 		this(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 	}
 	
+	/**
+	 * A public method that returns the message.
+	 * 
+	 * @param none, just call.
+	 * 
+	 * @return message, a String
+	 */
 	public String getMessage() {
 		return message;
 	}
 	
+	/**
+	 * A public method that sets the message to a given String.
+	 * 
+	 * @param message, the new String to use as a message
+	 * 
+	 * @return none; updates the value of (this.)message
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
 	
+	/**
+	 * A public method that returns the input.
+	 * 
+	 * @param none, just call.
+	 * 
+	 * @return input, a String
+	 */
 	public String getInput() {
 		return input;
 	}
 	
+	/**
+	 * A public method that sets the input to a given String.
+	 * 
+	 * @param message, the new String to use as an input
+	 * 
+	 * @return none; updates the value of (this.)input
+	 */
 	public void setInput(String input) {
 		this.input = input;
 	}
 	
+	/**
+	 * A public method that opens up the shell and creates its contents.
+	 * Closes when disposed.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return input, the input String
+	 */
 	public String open() {
 		Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
@@ -57,6 +124,15 @@ public class InputDialog extends Dialog
 		return input;
 	}
 	
+	/**
+	 * A private method that creates the contents of the shell,
+	 * namely the field, ok, and cancel buttons
+	 * 
+	 * @param shell, the Shell this is added to
+	 * 
+	 * @return none; creates the field and buttons as well as their
+	 * 		effects
+	 */
 	private void createContents(final Shell shell) {
 		shell.setLayout(new GridLayout(2, true));
 

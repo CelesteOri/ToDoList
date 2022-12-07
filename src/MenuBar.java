@@ -1,7 +1,7 @@
 /* *****************************************************************************
 * AUTHOR: Michelle Uddin, Joanna Zabasajja, Honor Jang
 * FILE: MenuBar.java
-* ASSIGNMENT: A3 - XTank
+* ASSIGNMENT: A4 - To-Do List
 * COURSE: CSc 335; Fall 2022
 * 
 * PURPOSE: 
