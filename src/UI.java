@@ -98,10 +98,9 @@ public class UI {
 				                         }
 				                         canvas.redraw();
 				            }   
-							
+
 						}
 					}
-		 			
 	 			}
 	 		}
 	 		public void mouseUp(MouseEvent e) {}
@@ -196,4 +195,3 @@ class mouseListen implements MouseListener
 		//System.out.println("Click - up.");
 	}
 }
-

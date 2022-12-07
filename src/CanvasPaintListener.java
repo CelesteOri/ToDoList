@@ -1,9 +1,12 @@
+//import java.awt.Color;
 import java.time.LocalDate;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
@@ -76,20 +79,22 @@ public class CanvasPaintListener implements PaintListener {
     
 	public void paintControl(PaintEvent e) {
 		int y = pos[1]; int baseY = 40;
-		
-		e.gc.setBackground(display.getSystemColor(SWT.COLOR_DARK_BLUE));
+		Color beige = new Color(display, 250, 237, 220);
+		Color coffee = new Color(display, 111, 78, 55);
+		Color paleBlue = new Color(display, 207, 226, 243);
+		e.gc.setBackground(beige);
 		e.gc.fillRectangle(0, 0, 1000, 800);
 		
 		if (tabs.size() > select[0]) {
-			e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+			e.gc.setBackground(paleBlue);
 			e.gc.fillRectangle(0, 30, 1000, 800);
 			
 			ToDoList todo = tabs.get(select[0])[0];
 			ToDoList done = tabs.get(select[0])[1];
 		
-			e.gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
+			e.gc.setBackground(beige);
 			e.gc.fillRoundRectangle(0, y, 700, 100*todo.size() + 50, 25, 25);
-			e.gc.setForeground(display.getSystemColor(SWT.COLOR_DARK_GREEN));
+			e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 			e.gc.setFont(new Font(display, "Courier", 12, SWT.BOLD));
 			if (todo.size() == 0 && done.size() == 0) {
 				e.gc.drawString("Nothing to show! Why not add one?", 20, y + 15);
@@ -104,9 +109,9 @@ public class CanvasPaintListener implements PaintListener {
                 if (task.getVisibility()) {
                     drawTask(e, i*100+baseY + y, todo.get(i));
                     if (task.isHovered()) {
-                        e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+                        e.gc.setBackground(beige);
                         e.gc.fillRoundRectangle(725, y, 250, 700, 25, 25);
-                        e.gc.setForeground(display.getSystemColor(SWT.COLOR_DARK_GREEN));
+                        e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 
                         e.gc.setFont(new Font(display, "Courier", 16, SWT.BOLD));
                         if (task.getTitle().length() > 12) {
@@ -143,15 +148,15 @@ public class CanvasPaintListener implements PaintListener {
                         }
                     }
                 }
-                e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+                e.gc.setBackground(paleBlue);
         		e.gc.fillRectangle(0, 30, 1000, 10);
 			}
 		
 		
 			int y2 =  100 * (todo.size() + 1) + y;
-			e.gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
+			e.gc.setBackground(beige);
 			e.gc.fillRoundRectangle(0, y2, 700, 100*done.size() + 50, 25, 25);
-			e.gc.setForeground(display.getSystemColor(SWT.COLOR_DARK_GREEN));
+			e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 			e.gc.setFont(new Font(display, "Courier", 12, SWT.BOLD));
 			e.gc.drawString("COMPLETED TASKS: ", 20, y2 + 15);
 			for (int i = 0; i < done.size(); i++) {
@@ -159,23 +164,22 @@ public class CanvasPaintListener implements PaintListener {
 			}
 			end[0] = y2;
 		} else {
-			e.gc.setForeground(display.getSystemColor(SWT.COLOR_DARK_GREEN));
+			e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 			e.gc.setFont(new Font(display, "Courier", 12, SWT.BOLD));
 			e.gc.drawString("A vast void greets you...", 20, 50);
 			e.gc.drawString("How about making a new To-Do List?", 20, 90);
 		}
-		
-		e.gc.setBackground(display.getSystemColor(SWT.COLOR_DARK_BLUE));
+		e.gc.setBackground(coffee);
 		e.gc.fillRectangle(0, 0, 1000, 30);
 		for (int i = 0; i < tabs.size(); i++) {
 			if (i == select[0]) {
-				e.gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+				e.gc.setBackground(paleBlue);
 			} else {
 				e.gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 			}
 			e.gc.fillRoundRectangle(i*175, 0, 175, 30, 25, 25);
 			e.gc.fillRectangle(i*175, 15, 175, 15);
-			e.gc.setForeground(display.getSystemColor(SWT.COLOR_DARK_GREEN));
+			e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 			e.gc.setFont(new Font(display, "Courier", 10, SWT.BOLD));
 			e.gc.drawString(tabs.displayName(i), i*175+10, 8);
 			
