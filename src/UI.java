@@ -84,18 +84,24 @@ public class UI {
 	 			if (tabs.size() > 0) {
 	 				ToDoList todo = tabs.get(select[0])[0];
 					ToDoList done = tabs.get(select[0])[1];
-		 			if (x >= coords[0] + 10 && x <= coords[0] + 50 
-		                     && y >= (100*index) + coords[1] + 20 + OFFSET
-		                     && y <= (100*index) + coords[1] + 60 + OFFSET
-		                     && index < todo.size() && index >= 0) {
-		                         todo.get(index).off(); 
-		                         Task completed = todo.remove(todo.get(index));
-		                         if (completed != null) { 
-		                             completed.done();
-		                             done.add(completed); 
-		                         }
-		                         canvas.redraw();
-		            }   
+					if (todo.get(index) != null) {
+						if (todo.get(index).getVisibility()) {
+							if (x >= coords[0] + 10 && x <= coords[0] + 50 
+				                     && y >= (100*index) + coords[1] + 20 + OFFSET
+				                     && y <= (100*index) + coords[1] + 60 + OFFSET
+				                     && index < todo.size() && index >= 0) {
+				                         todo.get(index).off(); 
+				                         Task completed = todo.remove(todo.get(index));
+				                         if (completed != null) { 
+				                             completed.done();
+				                             done.add(completed); 
+				                         }
+				                         canvas.redraw();
+				            }   
+							
+						}
+					}
+		 			
 	 			}
 	 		}
 	 		public void mouseUp(MouseEvent e) {}
