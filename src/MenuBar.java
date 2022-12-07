@@ -1,3 +1,18 @@
+/* *****************************************************************************
+* AUTHOR: Michelle Uddin, Joanna Zabasajja, Honor Jang
+* FILE: MenuBar.java
+* ASSIGNMENT: A3 - XTank
+* COURSE: CSc 335; Fall 2022
+* 
+* PURPOSE: 
+* 	Creating a menu with dropdowns that allows the user to select certain
+* 	actions, such as creating a new To-Do List, saving it, loading up a saved
+* 	list, add tasks, and filter. Called by UI.java.
+* 
+* USAGE: 
+* 	A menubar not unlike that used in Microsoft Word or something similar.
+* 	Allows the user to interact with the list in a variety of ways.
+*/
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
 import java.time.LocalDate;
@@ -43,6 +58,24 @@ public class MenuBar {
 	// filter widgets
 	private static MenuItem filterApply, filterClear;
 	
+	/**
+	 * A private method that opens a file and loads it into the program.
+	 * The selected file must have the .todo extension or otherwise be
+	 * formatted in the correct form, which is as so:
+	 * 
+	 * NAME OF LIST
+	 * task name
+	 * description
+	 * MM DD YY
+	 * tags (if any, a space if none)
+	 * complete / incomplete
+	 * task name...
+	 * 
+	 * @param selected, a String representing the path to the file
+	 * 
+	 * @return none; loads in the list from the given file into the
+	 * 		program
+	 */
 	private static void openFile(String selected) {
 		File file = new File(selected);
 	    try {
@@ -50,25 +83,32 @@ public class MenuBar {
 	    	String line = br.readLine();
 	    	int count = 0;
 	    	
+	    	// Holding information
 	    	String reset[] = {"", "", "", "\n"};
 	    	String data[] = {"", "", "", "\n"};
+	    	
 			while (line != null) {
-				System.out.println(count + " " + line);
+				// First line is the name, rest is task data
 				if (count == 0) { tabs.add(line); select[0] = tabs.size()-1; }
 				else if (count <= 4) { data[count-1] = line; }
 				
+				// Filled the data array, add to the To-Do list
 				if (count == 5) {
+					// Get date
 					int date[] = {0, 0, 0}; String temp[] = data[2].split(" ");
 					for (int i = 0; i < 3; i++) {
 						date[i] = Integer.parseInt(temp[i]);
 					}
 					
+					// Get tag
 					String tagName = data[3];
 					Tag tag = new Tag(tagName); tabs.addTag(tag);
 					if (tagName.length() == 0) {tag = null;}
 					
+					// Make task
 					Task task = new Task(data[0], data[1], date, tag);
 					
+					// Status (and where to put it)
 					int list = 0;
 					if (line.equals("complete")) { 
 						list = 1; task.done();
@@ -86,6 +126,16 @@ public class MenuBar {
 		}
 	}
 	
+	/**
+	 * A private method that saves a To-Do List to the current working
+	 * directory (should be in the project folder) as a .todo file,
+	 * or a text file of a specific format. Allows loading, but does not
+	 * prompt the user (unlike opening files)
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return none; saves the To-Do List to the computer
+	 */
 	private static void saveFile() {
 		ToDoList[] contents = tabs.get(select[0]);
 		String name = tabs.getName(select[0]) + ".todo";
@@ -94,15 +144,18 @@ public class MenuBar {
 			file = new FileWriter(name);
 			file.write(tabs.getName(select[0]) + "\n");
 			for (int list = 0; list < 2; list++) {
+				// Write down all the tasks
 				for (int i = 0; i < contents[list].size(); i++) {
 					Task task = contents[list].get(i);
 					file.write(task.getTitle() + "\n");
 					file.write(task.getDesc() + "\n");
 					file.write(task.getDate(2) + "\n");
 					
+					// tag line
 					if (task.getTag() == null) { file.write(" \n"); }
 					else { file.write(task.getTag().getTitle() + "\n"); }
 					
+					// completion
 					if (task.isCompleted()) { file.write("complete\n"); }
 					else { file.write("incomplete\n"); }
 				}
@@ -115,6 +168,18 @@ public class MenuBar {
 		}
 	}
 	
+	/**
+	 * A public constructor that initializes and makes the MenuBar.
+	 * Not a lot to say about that.
+	 * 
+	 * @param shell, the Shell the program is on
+	 * @param canvas, the Canvas that is affected
+	 * @param display, the Display of the program
+	 * @param tabs, a Tab representing all the tabs of the program
+	 * @param select, a 1-element array representing the selected list
+	 * 
+	 * @return none; creates the MenuBar
+	 */
 	public MenuBar(Shell shell, Canvas canvas, Display display,
 			Tab tabs, int select[]) {
 		this.shell = shell;
@@ -127,24 +192,53 @@ public class MenuBar {
 		shell.setMenuBar(menuBar);
 	}
 	
+	/**
+	 * A public method that gets the MenuBar's menu.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return menuBar, the Menu of the MenuBar
+	 */
 	public Menu getMenuBar() {
 		return menuBar;
 	}
 	
+	/**
+	 * A private method that initializes the Menu; calls other initializers.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return none; initializes the menu bar
+	 */
 	private static void initializeMenu() {
 		// initializes the file portion of the menu
 		initFileSubmenu();
-		
+		// edit portion
 		initEditSubmenu();		
-		
+		// filter
 		initFilterSubmenu();	
 	}
 	
+	/**
+	 * A private method that shuts down the program.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return none; ends the program
+	 */
 	private static void shutDown() {
 		shell.close();
 		display.dispose();
 	}
 	
+	/**
+	 * A private method that handles adding fields to dialog boxes.
+	 * 
+	 * @param name, the String used to label the field
+	 * @param dialog, the Shell this is drawn on
+	 * 
+	 * @return text, the Text from the field
+	 */
 	private static Text addField(String name, Shell dialog) {
 		Label label = new Label (dialog, SWT.NONE);
 		Text text = new Text (dialog, SWT.SINGLE | SWT.BORDER);
@@ -156,12 +250,23 @@ public class MenuBar {
 		return text;
 	}
 	
+	/**
+	 * A private method that initializes the File submenu, which
+	 * contains buttons to make a new To-Do List, save the current
+	 * To-Do List, load a To-Do List from a file, close the current
+	 * To-Do list, and close the program.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return none; initializes the file submenu
+	 */
 	private static void initFileSubmenu() {
 		fileMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
 		fileMenuHeader.setText("File");
 		fileMenu = new Menu(shell, SWT.DROP_DOWN);
 		fileMenuHeader.setMenu(fileMenu);
 
+		// Make new file
 	    fileNew = new MenuItem(fileMenu, SWT.PUSH);
 	    fileNew.setText("Create new to-do list");
 	    fileNew.addSelectionListener(widgetSelectedAdapter(e -> {
@@ -189,6 +294,7 @@ public class MenuBar {
 				ok.setText ("OK");
 				ok.addSelectionListener (widgetSelectedAdapter(event -> {
 					try {
+						// Adds a task so it's not empty
 						if (!tabs.contains(text.getText())) {
 							String todaysDate = LocalDate.now().toString();
 							int date[] = {
@@ -222,6 +328,7 @@ public class MenuBar {
 	    	}
 	    }));
 	    
+	    // Save file
 	    fileSave = new MenuItem(fileMenu, SWT.PUSH);
 	    fileSave.setText("Save current to-do list");
 	    fileSave.addSelectionListener(new SelectionListener() {
@@ -235,6 +342,7 @@ public class MenuBar {
 	        }
 	    });
 	    
+	    // Load file
 	    fileLoad = new MenuItem(fileMenu, SWT.PUSH);
 	    fileLoad.setText("Load a saved to-do list");
 	    fileLoad.addSelectionListener(new SelectionListener() {
@@ -243,7 +351,6 @@ public class MenuBar {
 	        	fd.setText("Open");
 	        	String[] filterExt = { "*.todo" };
 	        	fd.setFilterExtensions(filterExt);
-	        	
 	        	String selected = fd.open();
 	        	try {
 	        		openFile(selected);
@@ -257,6 +364,7 @@ public class MenuBar {
 	        }
 	    });
 	    
+	    // Close the current list
 	    fileClose = new MenuItem(fileMenu, SWT.PUSH);
 	    fileClose.setText("Close current to-do list");
 	    fileClose.addSelectionListener(new SelectionListener() {
@@ -273,6 +381,7 @@ public class MenuBar {
 	        }
 	    });
 	    
+	    // Exit the program
 	    fileExit = new MenuItem(fileMenu, SWT.PUSH);
 	    fileExit.setText("Exit");
 	    fileExit.addSelectionListener(new SelectionListener() {
@@ -285,12 +394,21 @@ public class MenuBar {
 	    });
 	}
 	
+	/**
+	 * A private method that initializes the Edit submenu, which
+	 * contains buttons to add new Tasks and Tags.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return none; initializes the edit submenu
+	 */
 	private static void initEditSubmenu() {
 		editMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
 		editMenuHeader.setText("Edit");
 		editMenu = new Menu(shell, SWT.DROP_DOWN);
 		editMenuHeader.setMenu(editMenu);
 
+		// Add tasks to the current list
 	    editAdd = new MenuItem(editMenu, SWT.PUSH);
 	    editAdd.setText("Add Task");
 	    editAdd.addSelectionListener(widgetSelectedAdapter(e -> {
@@ -392,6 +510,7 @@ public class MenuBar {
 				dialog.open ();
 	    }}));
 	    
+	    // Add a tag
 	    editNewTag = new MenuItem(editMenu, SWT.PUSH);
 	    editNewTag.setText("Add Tag");
 	    editNewTag.addSelectionListener(widgetSelectedAdapter(e -> {
@@ -400,19 +519,28 @@ public class MenuBar {
     		tagDialog.setMessage("please enter a tag:");
     		tagDialog.setInput("type");
     		String tag = tagDialog.open();
-    		System.out.println("tag entered = " + tag);
     		if (tag != null) {
     			tabs.addTag(tag);
     		}
 	    }));
 	}
 
+	/**
+	 * A private method that initializes the Filter submenu, which
+	 * contains buttons to trigger a filter (so that only the Tasks
+	 * with the Tag are shown) or clear the filter.
+	 * 
+	 * @param none; just call
+	 * 
+	 * @return none; initializes the filter submenu
+	 */
 	private static void initFilterSubmenu() {
 		filterMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
 		filterMenuHeader.setText("Filter");
 		filterMenu = new Menu(shell, SWT.DROP_DOWN);
 		filterMenuHeader.setMenu(filterMenu);
 		
+		// Apply filter
 		filterApply = new MenuItem(filterMenu, SWT.PUSH);
 		filterApply.setText("Apply Filter");
 		filterApply.addSelectionListener(new selectListen() {
@@ -428,6 +556,7 @@ public class MenuBar {
 		    			TableItem item = new TableItem(table, SWT.NONE);
 		    			item.setText(tabs.getTags().get(i).getTitle());
 		    		}
+		    		// Make a table of the current tags, as to pick one
 		    		table.setSize(300, 300);
 		    		table.addSelectionListener(new selectListen() {
 		    			public void widgetSelected(SelectionEvent event) {
@@ -437,7 +566,6 @@ public class MenuBar {
 		    				selected = selected.replace("TableItem {", "");
 		    				selected = selected.replace("}", "");
 		    				System.out.println(selected);
-		    				//filtersToApply.add(selected);
 		    				for (int i = 0; i < todo.size(); i++) {
 		    					Task t = todo.get(i);
 		    					if (t.getTag() != null) {
@@ -470,6 +598,7 @@ public class MenuBar {
 	    	
 	    });
 		
+		// Clear the filter
 		filterClear = new MenuItem(filterMenu, SWT.PUSH);
 		filterClear.setText("Clear Filter");
 		filterClear.addSelectionListener(new selectListen() {
